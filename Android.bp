@@ -91,6 +91,7 @@ java_library {
         "android.hardware.radio.sim-V4-java",
         "android.hardware.radio.voice-V4-java",
         "vendor.samsung.hardware.radio.network-V1-java",
+        "vendor.samsung.hardware.radio-V2.2-java",
         "voip-common",
         "ims-common",
         "unsupportedappusage",
