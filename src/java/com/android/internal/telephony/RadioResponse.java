@@ -1237,8 +1237,17 @@ public class RadioResponse extends IRadioResponse.Stub {
      * @param smsc Short Message Service Center address on the device
      */
     public void getSmscAddressResponse(RadioResponseInfo responseInfo, String smsc) {
-        if(smsc.contains("\"") || smsc.contains(","))
-            smsc = "";
+        if(smsc.contains("\"") || smsc.contains(",")) {
+            android.util.Log.e("PHH", "Got weird SMSC: " + smsc);
+            try {
+                String[] a = smsc.split("\"");
+                smsc = a[1];
+            } catch(Throwable t) {
+                android.util.Log.e("PHH", "Failed parsing weird smsc", t);
+                smsc = "";
+            }
+            android.util.Log.e("PHH", "Patched smsc " + smsc);
+        }
         responseString(responseInfo, smsc);
     }
 
