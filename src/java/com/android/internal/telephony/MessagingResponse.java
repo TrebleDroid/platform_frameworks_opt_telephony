@@ -172,14 +172,19 @@ public class MessagingResponse extends IRadioMessagingResponse.Stub {
     public void getSmscAddressResponse(RadioResponseInfo responseInfo, String smsc) {
         if(smsc.contains("\"") || smsc.contains(",")) {
             android.util.Log.e("PHH", "Got weird SMSC: " + smsc);
-            try {
-                String[] a = smsc.split("\"");
-                smsc = a[1];
-            } catch(Throwable t) {
-                android.util.Log.e("PHH", "Failed parsing weird smsc", t);
+            if (android.os.SystemProperties.getBoolean("persist.sys.phh.patch_smsc", true)) {
+                try {
+                    String[] a = smsc.split("\"");
+                    smsc = a[1];
+                } catch(Throwable t) {
+                    android.util.Log.e("PHH", "Failed parsing weird smsc", t);
+                    smsc = "";
+                }
+                android.util.Log.e("PHH", "Patched smsc " + smsc);
+            } else {
+                android.util.Log.e("PHH", "Skipping patching smsc");
                 smsc = "";
             }
-            android.util.Log.e("PHH", "Patched smsc " + smsc);
         }
         RadioResponse.responseString(HAL_SERVICE_MESSAGING, mRil, responseInfo, smsc);
     }
